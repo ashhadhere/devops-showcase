@@ -1,0 +1,7 @@
+bucket = "REPLACE-WITH-BOOTSTRAP-OUTPUT"
+key = "aws-eks/portfolio/addons.tfstate"
+region = "us-east-1"
+encrypt = true
+use_lockfile = true
+allowed_account_ids = ["123456789012"]
+kms_key_id = "REPLACE-WITH-BOOTSTRAP-KMS-ARN"

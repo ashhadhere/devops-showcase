@@ -1,0 +1,13 @@
+# Overlay with: -var-file=terraform.tfvars -var-file=resilient.tfvars
+# This improves egress resilience, but is not a complete production configuration.
+single_nat_gateway = false
+node_groups = {
+  system = {
+    min = 3
+    desired = 3
+    max = 6
+    instance_types = ["m6i.large", "m6a.large"]
+    capacity_type = "ON_DEMAND"
+    disk_gb = 50
+  }
+}

@@ -1,0 +1,9 @@
+tests\network.tftest.hcl... in progress
+  run "portfolio_network"... pass
+  run "resilient_network"... pass
+  run "reject_single_az"... pass
+  run "reject_duplicate_az"... pass
+tests\network.tftest.hcl... tearing down
+tests\network.tftest.hcl... pass
+
+Success! 4 passed, 0 failed.

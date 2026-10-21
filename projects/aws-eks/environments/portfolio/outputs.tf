@@ -1,0 +1,10 @@
+output "cluster_name" { value = module.eks.cluster_name }
+output "cluster_endpoint" { value = module.eks.cluster_endpoint }
+output "vpc_id" { value = module.network.vpc_id }
+output "private_subnet_ids" { value = module.network.private_subnet_ids }
+output "public_subnet_ids" { value = module.network.public_subnet_ids }
+output "controller_role_arn" { value = module.eks.controller_role_arn }
+output "node_security_group_id" { value = module.eks.node_security_group_id }
+output "control_plane_security_group_id" { value = module.eks.control_plane_security_group_id }
+output "addon_versions" { value = module.eks.addon_versions }
+output "configure_kubectl" { value = "aws eks update-kubeconfig --region ${var.region} --name ${module.eks.cluster_name} --role-arn ${var.admin_role_arn}" }
