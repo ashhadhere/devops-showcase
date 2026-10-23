@@ -1,0 +1,11 @@
+tests\eks.tftest.hcl... in progress
+  run "secure_cluster_defaults"... pass
+  run "restricted_public_api"... pass
+  run "reject_world_access"... pass
+  run "reject_bad_scaling"... pass
+  run "reject_root_admin"... pass
+  run "reject_obsolete_kubernetes"... pass
+tests\eks.tftest.hcl... tearing down
+tests\eks.tftest.hcl... pass
+
+Success! 6 passed, 0 failed.

@@ -1,0 +1,8 @@
+bucket = "REPLACE-WITH-BOOTSTRAP-OUTPUT"
+key = "aws-eks/portfolio/terraform.tfstate"
+region = "us-east-1"
+encrypt = true
+use_lockfile = true
+allowed_account_ids = ["123456789012"]
+# Add kms_key_id from bootstrap output; credentials come from your AWS session.
+kms_key_id = "REPLACE-WITH-BOOTSTRAP-KMS-ARN"

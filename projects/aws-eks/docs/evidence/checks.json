@@ -1,0 +1,66 @@
+[
+  {
+    "check": "final-format",
+    "exit_code": 0
+  },
+  {
+    "check": "final-bootstrap-init",
+    "exit_code": 0
+  },
+  {
+    "check": "final-bootstrap-validate",
+    "exit_code": 0
+  },
+  {
+    "check": "final-environments-portfolio-init",
+    "exit_code": 0
+  },
+  {
+    "check": "final-environments-portfolio-validate",
+    "exit_code": 0
+  },
+  {
+    "check": "final-addons-init",
+    "exit_code": 0
+  },
+  {
+    "check": "final-addons-validate",
+    "exit_code": 0
+  },
+  {
+    "check": "final-modules-network-init",
+    "exit_code": 0
+  },
+  {
+    "check": "final-modules-network-validate",
+    "exit_code": 0
+  },
+  {
+    "check": "final-modules-eks-init",
+    "exit_code": 0
+  },
+  {
+    "check": "final-modules-eks-validate",
+    "exit_code": 0
+  },
+  {
+    "check": "final-modules-network-test",
+    "exit_code": 0
+  },
+  {
+    "check": "final-modules-eks-test",
+    "exit_code": 0
+  },
+  {
+    "check": "final-tflint",
+    "exit_code": 0
+  },
+  {
+    "check": "final-checkov",
+    "exit_code": 0
+  },
+  {
+    "check": "final-helm-lint",
+    "exit_code": 0
+  }
+]
