@@ -7,6 +7,7 @@ Authoring checks completed on **22 October 2026** without AWS credentials or pro
 | Terraform 1.13.4 `fmt -check -recursive` | Passed |
 | `init -backend=false` and `validate` | Passed for bootstrap, portfolio environment, add-ons, network module and EKS module |
 | Committed provider locks with readonly initialization | Passed using the locally cached, previously verified provider binaries; official archive hashes are retained in the locks |
+| Explicit Linux/Windows provider package hashes | Generated with authenticated official packages; see provider lock evidence below |
 | Network mocked plan tests | 4 passed, 0 failed |
 | EKS mocked plan tests | 6 passed, 0 failed |
 | TFLint 0.59.1 / AWS rules 0.45.0 | Passed with zero findings |
@@ -17,6 +18,8 @@ Authoring checks completed on **22 October 2026** without AWS credentials or pro
 | GitHub Action references | Each full commit SHA checked against the official release tag; workflow grants only contents-read and contains no apply job/AWS credentials |
 
 The pinned provider selections are AWS 6.38.0, TLS 4.1.0 and Helm 3.1.2. EKS add-on builds and AMI releases cannot be locked by provider lock files. AWS's default compatible add-on lookup is mocked in tests and has not been queried against a real cluster/account.
+
+The first GitHub Linux run exposed missing Linux unpacked-package (`h1`) hashes: read-only initialization verified archive hashes, but subsequent schema validation could not verify the unpacked Linux provider against Windows-only package hashes. This was corrected by running `terraform providers lock -platform=linux_amd64` against the pinned AWS/TLS/Helm providers and retaining both Windows and Linux hashes in each root's lock file. Checksum enforcement and read-only CI initialization remain enabled. See [authenticated provider lock generation](evidence/linux-provider-lock.txt). No infrastructure resource definitions changed for that portability fix.
 
 See [raw check results](evidence/checks.json), [network test output](evidence/final-modules-network-test.txt), [EKS test output](evidence/final-modules-eks-test.txt), [scanner summary](evidence/checkov-summary.json) and [chart lint output](evidence/final-helm-lint.txt). GitHub's Linux workflow result is recorded separately in the PR checks; local Windows success alone does not claim a successful hosted workflow.
 

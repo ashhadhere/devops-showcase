@@ -73,6 +73,8 @@ Run commands from **this directory** (`projects/aws-eks`), never the older repos
 
 ## Validate locally without AWS
 
+Install TFLint 0.59.1 and Checkov 3.2.495 alongside Terraform first. For Checkov, use an isolated Python environment with `python -m pip install checkov==3.2.495`; CI uses Python 3.12 and installs these tools automatically.
+
 ```bash
 terraform fmt -check -recursive
 for dir in bootstrap environments/portfolio addons modules/network modules/eks; do

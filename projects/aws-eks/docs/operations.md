@@ -2,7 +2,15 @@
 
 ## Backend bootstrap and permissions
 
-Use a separate sandbox account and short-lived credentials. `allowed_account_ids` rejects a mismatched provider account; set it in backend config too. The bootstrap creates the backend but cannot initially depend on itself. Preserve its initial local state under your organization's encrypted backup process. For remote bootstrap state after bucket creation, add `terraform { backend "s3" {} }` to a separate `bootstrap/backend.tf`, format it as a multiline block, then run `terraform -chdir=bootstrap init -migrate-state -backend-config=backend.hcl` with a config using **`aws-eks/bootstrap/terraform.tfstate`**, not either environment key. Confirm `terraform state list` and an S3 version exist before securely retiring the local backup according to retention policy.
+Use a separate sandbox account and short-lived credentials. `allowed_account_ids` rejects a mismatched provider account; set it in backend config too. The bootstrap creates the backend but cannot initially depend on itself. Preserve its initial local state under your organization's encrypted backup process. For remote bootstrap state after bucket creation, add this to a separate `bootstrap/backend.tf`:
+
+```hcl
+terraform {
+  backend "s3" {}
+}
+```
+
+Then run `terraform -chdir=bootstrap init -migrate-state -backend-config=backend.hcl` with a config using **`aws-eks/bootstrap/terraform.tfstate`**, not either environment key. Confirm `terraform state list` and an S3 version exist before securely retiring the local backup according to retention policy.
 
 Grant the human/team state role only the required bucket prefix. For each state key, Terraform needs `s3:ListBucket` on the bucket with the relevant prefix, `s3:GetObject` and `s3:PutObject` on that exact state object, and `s3:GetObject`, `s3:PutObject`, `s3:DeleteObject` on the corresponding `KEY.tflock` object. It does not need DeleteObject on the state itself. Add `kms:Encrypt`, `kms:Decrypt`, `kms:GenerateDataKey` on the state key ARN (and DescribeKey if your tooling needs it). Bucket/key administrators and recovery operators should be separate from ordinary state writers. For migration/backup, additional permissions such as ListBucketVersions/GetObjectVersion may be required. See [HashiCorp S3 backend permissions](https://developer.hashicorp.com/terraform/language/backend/s3).
 
@@ -15,6 +23,8 @@ Bucket versioning is enabled with no automatic state-version expiration: recover
 ## Version promotion
 
 Terraform CLI 1.13.4 is the tested minimum/CI version. AWS `~>6.38.0`, TLS `~>4.1.0`, Helm `~>3.1.0` constrain updates to reviewed minor families; committed per-root lock files select exact provider releases and include Linux/Windows checksums. Upgrades need PRs, lock updates, mocked tests, a sandbox apply and runtime evidence. Terraform lock files do not pin charts, add-on APIs or AMIs: the controller chart is explicitly 3.6.0; its vendored IAM policy is tied to app v3.6.0. Review chart release notes/CRD changes together with IAM changes. Helm upgrades do not automatically upgrade existing CRDs; apply reviewed upstream CRDs before upgrading a deployed controller if the release requires it.
+
+When adding a different workstation platform, generate its package hashes with `terraform providers lock -platform=darwin_arm64` (or the appropriate platform) in each Terraform root and review the lock changes before using the read-only validation script. The committed locks explicitly cover `linux_amd64` and `windows_amd64`.
 
 EKS 1.35 is a deliberate minor choice, not a forever default. Confirm the target region's supported versions. Default compatible CNI/CoreDNS/kube-proxy builds are resolved via AWS API at plan time; freeze reviewed values in `addon_versions` for stable production promotion. Node groups follow the cluster minor and use an EKS-selected AL2023 x86_64 release on creation. Add `release_version` controls and a tested AMI promotion workflow before needing exact AMI reproducibility; do not assume an existing group automatically rolls to every new AMI build. Only choose x86_64 instance types with the current AMI.
 
